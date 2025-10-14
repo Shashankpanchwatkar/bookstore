@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Online Bookstore</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+          rel="stylesheet" 
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+          crossorigin="anonymous">
+    <style>
+    /* ... Existing Styles ... */
+    body {
+        background-color: #f8f9fa; 
+    }
+    .book-card {
+        margin-bottom: 20px;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .book-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+    }
+    .card-img-top {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+    }
+ 
+    .book-description {
+        
+        overflow: hidden; 
+        text-overflow: ellipsis;
+        
+        
+        height: 60px; /* Give it a fixed height for consistency */
+
+       
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Limit to 3 lines */
+        -webkit-box-orient: vertical;
+        
+     
+    }
+</style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#">📚 My Bookstore</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/bookstore}">Home</a>
+                    </li>
+                </ul>
+                <a class="btn btn-outline-light" th:href="@{/cart}">View Cart</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="mb-5 text-center text-primary">🛍️ Featured Books</h2>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            <div class="col" th:each="book : ${books}">
+
+                <div class="card h-100 shadow-sm book-card">
+
+                    <img th:src="@{${book.imageUrl}}" class="card-img-top" alt="Book Cover" />
+
+                    <div class="card-body d-flex flex-column">
+
+                        <h5 class="card-title text-truncate" th:text="${book.title}">Book Title</h5>
+
+                        <p class="card-text text-muted small">by <strong th:text="${book.author}">Author Name</strong></p>
+
+                        <p class="card-text small text-secondary fst-italic book-description" 
+                           th:text="${book.description}">A brief description of the book.</p>
+
+                        <div class="mt-auto pt-3">
+                            <h4 class="mb-3 text-danger" th:text="'$' + ${book.price}">$0.00</h4>
+
+                            <div class="d-grid gap-2">
+                                <form th:action="@{/addToCart}" method="post">
+                                    <input type="hidden" name="bookId" th:value="${book.id}"/>
+                                    <button type="submit" class="btn btn-warning w-100">🛒 Add to Cart</button>
+                                </form>
+
+                                <form th:action="@{/buyNow}" method="post">
+                                    <input type="hidden" name="bookId" th:value="${book.id}"/>
+                                    <button type="submit" class="btn btn-primary w-100">⚡ Buy Now</button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <p class="text-center mt-5 mb-3 text-muted">Showing <span th:text="${#lists.size(books)}">10</span> results.</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+            crossorigin="anonymous">
+    </script>
+</body>
+</html>
