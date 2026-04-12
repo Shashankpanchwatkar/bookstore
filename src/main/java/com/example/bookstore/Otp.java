@@ -18,7 +18,7 @@ public class Otp {
     private LocalDateTime expiresAt;
     private boolean used = false;
 
-    // getters & setters
+    
     public Long getId() { return id; }
     public String getPhoneNumber() { return phoneNumber; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
