@@ -8,7 +8,7 @@
           rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa; /* Light gray background */
+            background-color: #f8f9fa; 
             display: flex;
             justify-content: center;
             align-items: center;
@@ -55,7 +55,7 @@
         const messageDiv = document.getElementById("message");
         messageDiv.innerText = text;
         
-        // Use Bootstrap classes for styling feedback
+        
         messageDiv.className = isError 
             ? "mt-3 text-center small text-danger fw-bold" 
             : "mt-3 text-center small text-success";
@@ -102,28 +102,28 @@
         })
         .then(res => {
             if (!res.ok) {
-                // If not OK (e.g., 401), reject the promise with the error message
+                
                 return res.json().then(errData => Promise.reject(errData.message || 'Invalid OTP.'));
             }
             return res.json();
         })
         .then(data => {
-            // Check for approved status
+            
             if (data.status === "approved" || data.redirectUrl) {
                 const redirectUrl = data.redirectUrl || "/bookstore";
                 displayMessage("Login Successful. Redirecting...", false);
                 
-                // Redirect after a short delay
+                
                 setTimeout(() => {
                      window.location.href = redirectUrl;
                 }, 500); 
             } else {
-                // Display specific error message from server
+                
                 displayMessage(data.message || "Invalid OTP.", true);
             }
         })
         .catch(error => {
-            // Catches rejected promise (non-2xx status) or network errors
+           
             console.error('Login error:', error);
             const errorMessage = typeof error === 'string' ? error : "An unexpected error occurred.";
             displayMessage(errorMessage, true);
