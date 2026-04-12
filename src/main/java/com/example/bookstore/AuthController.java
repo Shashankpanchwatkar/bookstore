@@ -15,11 +15,10 @@ import java.util.Map;
 public class AuthController {
     
     private final OtpService otpService;
-    // CRITICAL: Inject UserDetailsService to fetch user details for Spring Security
+    
     private final UserDetailsService userDetailsService; 
 
-    // Constructor Injection
-    // NOTE: You must ensure UserDetailsService is configured as a Spring Bean
+    
     public AuthController(OtpService otpService, UserDetailsService userDetailsService) {
         this.otpService = otpService;
         this.userDetailsService = userDetailsService;
@@ -40,23 +39,21 @@ public class AuthController {
         
         if (valid) {
             
-            // 🚨 STEP 1: Load User Details (using phone as the username)
             UserDetails userDetails = userDetailsService.loadUserByUsername(phone);
             
-            // 🚨 STEP 2: Create Authentication Token (No password needed for OTP)
+            
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                 userDetails, null, userDetails.getAuthorities());
             
-            // 🚨 STEP 3: Establish the Session (THIS IS THE FIX)
-            SecurityContextHolder.getContext().setAuthentication(authentication);
             
-            // Return success with the redirect URL for client-side navigation
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+         
             return ResponseEntity.ok(Map.of(
                 "status", "approved", 
                 "redirectUrl", "/bookstore" 
             ));
         } else {
-            // Return 401 Unauthorized status for security failure
+           
             return ResponseEntity.status(401).body(Map.of("status", "denied", "message", "Invalid or expired OTP."));
         }
     }
