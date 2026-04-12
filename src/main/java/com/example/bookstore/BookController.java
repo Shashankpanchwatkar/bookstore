@@ -13,6 +13,6 @@ public class BookController {
     @GetMapping("/bookstore")
     public String viewBooks(Model model) {
         model.addAttribute("books", bookRepository.findAll());
-        return "bookstore"; // This should point to bookstore.html using Thymeleaf, etc.
+        return "bookstore"; 
     }
 }
